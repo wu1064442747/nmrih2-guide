@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NMRIH2 Guide">
+  <rect width="64" height="64" rx="12" fill="#0d1110"/>
+  <path d="M12 45h40v6H12z" fill="#d73f2c"/>
+  <path d="M16 15h10l12 22V15h10v34H38L26 27v22H16z" fill="#eef4ee"/>
+</svg>

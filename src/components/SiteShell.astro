@@ -1,0 +1,34 @@
+---
+import { navigationItems, siteConfig } from '~/data/site';
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="No More Room in Hell 2 Guide home">
+    <span class="brand-mark">2</span>
+    <span>{siteConfig.shortTitle}</span>
+  </a>
+  <nav aria-label="Primary">
+    {
+      navigationItems.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))
+    }
+  </nav>
+</header>
+
+<main>
+  <slot />
+</main>
+
+<footer class="site-footer">
+  <div>
+    <strong>{siteConfig.title}</strong>
+    <p>Fan-made guide site. Not affiliated with or endorsed by Torn Banner Studios.</p>
+  </div>
+  <div class="footer-links">
+    <a href={siteConfig.officialUrl} rel="noopener noreferrer" target="_blank">Official site</a>
+    <a href={siteConfig.steamUrl} rel="noopener noreferrer" target="_blank">Steam</a>
+    <a href="/privacy-policy">Privacy</a>
+    <a href="/terms-of-service">Terms</a>
+  </div>
+</footer>

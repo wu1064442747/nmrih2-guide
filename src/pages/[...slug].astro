@@ -1,0 +1,70 @@
+---
+import SiteShell from '~/components/SiteShell.astro';
+import { getGuidePage, guidePages, pathForGuide } from '~/data/site';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { articleJsonLd, breadcrumbJsonLd } from '~/lib/seo';
+
+export function getStaticPaths() {
+  return guidePages.map((page) => ({
+    params: { slug: page.slug },
+  }));
+}
+
+const slug = Astro.params.slug ?? '';
+const page = getGuidePage(slug);
+
+if (!page) {
+  return new Response('Not Found', { status: 404 });
+}
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  canonicalPath={pathForGuide(page)}
+  jsonLd={[articleJsonLd(page), breadcrumbJsonLd(page)]}
+>
+  <SiteShell>
+    <article class="article">
+      <header class="article-header">
+        <p class="eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p>{page.description}</p>
+        <div class="meta-row">
+          <span>Updated {page.updated}</span>
+          <span>{page.confidence === 'verified' ? 'Verified source context' : 'Needs live playtest'}</span>
+        </div>
+      </header>
+
+      <section class="article-summary">
+        <h2>Quick read</h2>
+        <p>{page.summary}</p>
+        <ul>
+          {page.highlights.map((highlight) => <li>{highlight}</li>)}
+        </ul>
+      </section>
+
+      {
+        page.sections.map((section) => (
+          <section class="article-section">
+            <h2>{section.heading}</h2>
+            {section.body.map((paragraph) => <p>{paragraph}</p>)}
+            {section.bullets && (
+              <ul>
+                {section.bullets.map((bullet) => <li>{bullet}</li>)}
+              </ul>
+            )}
+            {section.note && <aside class="note">{section.note}</aside>}
+          </section>
+        ))
+      }
+
+      <section class="article-section sources">
+        <h2>Sources</h2>
+        <ul>
+          {page.sources.map((source) => <li><a href={source.href} rel="noopener noreferrer" target="_blank">{source.label}</a></li>)}
+        </ul>
+      </section>
+    </article>
+  </SiteShell>
+</BaseLayout>

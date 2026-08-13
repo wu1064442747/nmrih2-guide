@@ -1,0 +1,21 @@
+---
+import SiteShell from '~/components/SiteShell.astro';
+import { siteConfig } from '~/data/site';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Service" description={`Terms of service for ${siteConfig.title}.`} canonicalPath="/terms-of-service">
+  <SiteShell>
+    <section class="legal-page">
+      <h1>Terms of Service</h1>
+      <p>
+        This site provides informational game guides. Content may change as official
+        patches and verified playtest notes change.
+      </p>
+      <p>
+        No More Room in Hell 2 names, media, and trademarks belong to their respective
+        owners.
+      </p>
+    </section>
+  </SiteShell>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+import SiteShell from '~/components/SiteShell.astro';
+import { siteConfig } from '~/data/site';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy" description={`Privacy policy for ${siteConfig.title}.`} canonicalPath="/privacy-policy">
+  <SiteShell>
+    <section class="legal-page">
+      <h1>Privacy Policy</h1>
+      <p>
+        This static guide site does not require user accounts. Server logs may be
+        processed by the hosting provider for security, abuse prevention, and uptime
+        diagnostics.
+      </p>
+      <p>
+        We may use Plausible Analytics to understand aggregate page views and referral
+        patterns without placing tracking cookies. We may also use Microsoft Clarity to
+        review heatmaps and session interactions so navigation and guide pages can be
+        improved. These tools are used for site quality and analytics, not account-based
+        profiling.
+      </p>
+    </section>
+  </SiteShell>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import SiteShell from '~/components/SiteShell.astro';
+import { siteConfig } from '~/data/site';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description={`About ${siteConfig.title} and its source-first editorial approach.`} canonicalPath="/about">
+  <SiteShell>
+    <section class="legal-page">
+      <h1>About {siteConfig.title}</h1>
+      <p>
+        This is a fan-made No More Room in Hell 2 guide site built around verified
+        official sources and clearly marked playtest-dependent guidance.
+      </p>
+      <p>
+        The site is not affiliated with or endorsed by Torn Banner Studios. Official
+        game information belongs to its respective owners.
+      </p>
+    </section>
+  </SiteShell>
+</BaseLayout>

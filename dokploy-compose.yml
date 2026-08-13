@@ -1,0 +1,19 @@
+services:
+  nmrih2-guide:
+    image: ghcr.io/wu1064442747/nmrih2-guide:main
+    pull_policy: always
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - dokploy-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  dokploy-network:
+    external: true

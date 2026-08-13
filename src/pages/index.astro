@@ -1,0 +1,102 @@
+---
+import SiteShell from '~/components/SiteShell.astro';
+import { guidePages, homePage, pathForGuide, siteConfig, sources } from '~/data/site';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { videoGameJsonLd, websiteJsonLd } from '~/lib/seo';
+
+const p0Pages = guidePages.slice(0, 6);
+const mapPages = guidePages.filter((page) => page.intent === 'map');
+const modePages = guidePages.filter((page) => page.intent === 'mode');
+---
+
+<BaseLayout
+  title={homePage.title}
+  description={homePage.description}
+  jsonLd={[websiteJsonLd(), videoGameJsonLd()]}
+>
+  <SiteShell>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">{homePage.eyebrow}</p>
+        <h1>{homePage.heroTitle}</h1>
+        <p>{homePage.heroBody}</p>
+        <div class="hero-actions">
+          <a class="button primary" href="/beginner-guide">Start with the beginner route</a>
+          <a class="button secondary" href="/armageddon-1-0-update">Read the 1.0 update hub</a>
+        </div>
+      </div>
+      <figure class="hero-media">
+        <img src={siteConfig.heroImage} alt="No More Room in Hell 2 gameplay screenshot" loading="eager" />
+        <figcaption>Source image from the Steam store media gallery.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Launch status</p>
+        <h2>What this site covers first</h2>
+        <p>
+          No More Room in Hell 2 launched 1.0 around Armageddon with Survival Mode,
+          Raven Rock, Solo Mode, Tutorial, Weekly Assignments, and Merits as the first
+          content cluster to organize.
+        </p>
+      </div>
+      <dl class="facts">
+        <div><dt>Game</dt><dd>{siteConfig.gameName}</dd></div>
+        <div><dt>Developer</dt><dd>{siteConfig.developer}</dd></div>
+        <div><dt>Platform</dt><dd>Steam / PC</dd></div>
+        <div><dt>Release</dt><dd>Aug 11, 2026</dd></div>
+      </dl>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Priority guides</p>
+        <h2>First pages to read</h2>
+      </div>
+      <div class="guide-grid">
+        {
+          p0Pages.map((page) => (
+            <a class="guide-card" href={pathForGuide(page)}>
+              <span>{page.eyebrow}</span>
+              <h3>{page.title}</h3>
+              <p>{page.summary}</p>
+              <small>{page.confidence === 'verified' ? 'Verified source context' : 'Needs live playtest'}</small>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section two-columns">
+      <div>
+        <div class="section-heading">
+          <p class="eyebrow">Modes</p>
+          <h2>Choose the right guide path</h2>
+        </div>
+        <div class="stack-list">
+          {modePages.map((page) => <a href={pathForGuide(page)}>{page.title}</a>)}
+        </div>
+      </div>
+      <div>
+        <div class="section-heading">
+          <p class="eyebrow">Maps</p>
+          <h2>Build the route library</h2>
+        </div>
+        <div class="stack-list">
+          {mapPages.map((page) => <a href={pathForGuide(page)}>{page.title}</a>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section evidence">
+      <div class="section-heading">
+        <p class="eyebrow">Evidence first</p>
+        <h2>Sources used for the launch build</h2>
+      </div>
+      <ul>
+        {Object.values(sources).map((source) => <li><a href={source.href} rel="noopener noreferrer" target="_blank">{source.label}</a></li>)}
+      </ul>
+    </section>
+  </SiteShell>
+</BaseLayout>
