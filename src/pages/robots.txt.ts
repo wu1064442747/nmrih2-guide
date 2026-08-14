@@ -1,7 +1,7 @@
 import { guidePages, pathForGuide, siteConfig } from '~/data/site';
 
 export function GET() {
-  const sitemapUrl = `${siteConfig.siteUrl}/sitemap-index.xml`;
+  const sitemapUrl = `${siteConfig.siteUrl}/sitemap.xml`;
   const paths = ['/', '/about', '/privacy-policy', '/terms-of-service', ...guidePages.map(pathForGuide)];
 
   return new Response(
