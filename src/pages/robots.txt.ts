@@ -1,8 +1,8 @@
-import { guidePages, pathForGuide, siteConfig } from '~/data/site';
+import { indexableGuidePages, pathForGuide, siteConfig } from '~/data/site';
 
 export function GET() {
   const sitemapUrl = `${siteConfig.siteUrl}/sitemap.xml`;
-  const paths = ['/', '/about', '/privacy-policy', '/terms-of-service', ...guidePages.map(pathForGuide)];
+  const paths = ['/', '/about', '/privacy-policy', '/terms-of-service', ...indexableGuidePages.map(pathForGuide)];
 
   return new Response(
     [

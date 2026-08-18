@@ -1,9 +1,9 @@
 import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { analyticsConfig, guidePages, pathForGuide, siteConfig } from '../src/data/site.ts';
+import { analyticsConfig, guidePages, indexableGuidePages, pathForGuide, siteConfig } from '../src/data/site.ts';
 
 const distDir = join(process.cwd(), 'dist');
-const requiredPaths = ['index.html', 'robots.txt', 'sitemap-index.xml'];
+const requiredPaths = ['index.html', 'robots.txt', 'sitemap-index.xml', 'sitemap-0.xml'];
 
 for (const path of requiredPaths) {
   statSync(join(distDir, path));
@@ -18,6 +18,24 @@ for (const page of guidePages) {
   }
   if (!html.includes(page.title)) {
     throw new Error(`Missing title ${page.title} in ${htmlPath}`);
+  }
+  if (!page.indexable && !html.includes('name="robots" content="noindex,follow"')) {
+    throw new Error(`Research page ${page.slug} is missing noindex metadata.`);
+  }
+}
+
+const sitemap = readFileSync(join(distDir, 'sitemap-0.xml'), 'utf8');
+for (const page of indexableGuidePages) {
+  const canonical = `${siteConfig.siteUrl}${pathForGuide(page)}`;
+  if (!sitemap.includes(canonical)) {
+    throw new Error(`Published guide ${page.slug} is missing from the sitemap.`);
+  }
+}
+
+for (const page of guidePages.filter((candidate) => !candidate.indexable)) {
+  const canonical = `${siteConfig.siteUrl}${pathForGuide(page)}`;
+  if (sitemap.includes(canonical)) {
+    throw new Error(`Research page ${page.slug} must not appear in the sitemap.`);
   }
 }
 
@@ -41,4 +59,4 @@ if (analyticsConfig.clarityProjectId && !home.includes(`https://www.clarity.ms/t
   throw new Error('Built homepage is missing the Microsoft Clarity loader.');
 }
 
-console.log(`Checked ${guidePages.length} guide pages in dist.`);
+console.log(`Checked ${guidePages.length} guide pages and ${indexableGuidePages.length} sitemap entries in dist.`);

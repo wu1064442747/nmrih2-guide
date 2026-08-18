@@ -7,10 +7,11 @@ interface Props {
   title: string;
   description: string;
   canonicalPath?: string;
+  robots?: 'index,follow' | 'noindex,follow';
   jsonLd?: Array<Record<string, unknown>>;
 }
 
-const { title, description, canonicalPath = '/', jsonLd = [] } = Astro.props;
+const { title, description, canonicalPath = '/', robots, jsonLd = [] } = Astro.props;
 const canonical = absoluteUrl(canonicalPath);
 const fullTitle = title === siteConfig.title ? title : pageTitle(title);
 const clarityScript = `(function(c,l,a,r,i,t,y){
@@ -27,6 +28,7 @@ const clarityScript = `(function(c,l,a,r,i,t,y){
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
     {
       analyticsConfig.googleSiteVerification && (
         <meta name="google-site-verification" content={analyticsConfig.googleSiteVerification} />

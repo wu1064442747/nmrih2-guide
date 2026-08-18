@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { guidePages, homePage, siteConfig } from '~/data/site';
-import { absoluteUrl, articleJsonLd, breadcrumbJsonLd, pageTitle, videoGameJsonLd, websiteJsonLd } from '~/lib/seo';
+import { absoluteUrl, articleJsonLd, breadcrumbJsonLd, faqJsonLd, pageTitle, videoGameJsonLd, websiteJsonLd } from '~/lib/seo';
 
 describe('seo helpers', () => {
   it('builds canonical URLs without trailing slashes', () => {
@@ -35,6 +35,16 @@ describe('seo helpers', () => {
     expect(article.headline).toBe(page.title);
     expect(article.mainEntityOfPage['@id']).toBe(`${siteConfig.siteUrl}/survival-mode`);
     expect(breadcrumb.itemListElement).toHaveLength(2);
+  });
+
+  it('emits FAQPage JSON-LD only for pages with source-bounded answers', () => {
+    const page = guidePages.find((candidate) => candidate.slug === 'beginner-guide');
+    expect(page?.faqs).toBeDefined();
+    if (!page?.faqs) return;
+
+    const faq = faqJsonLd(page);
+    expect(faq?.['@type']).toBe('FAQPage');
+    expect(faq?.mainEntity).toHaveLength(page.faqs.length);
   });
 
   it('keeps homepage metadata focused on the launch topic', () => {

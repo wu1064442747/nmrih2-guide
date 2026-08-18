@@ -2,7 +2,7 @@
 import SiteShell from '~/components/SiteShell.astro';
 import { getGuidePage, guidePages, pathForGuide } from '~/data/site';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import { articleJsonLd, breadcrumbJsonLd } from '~/lib/seo';
+import { articleJsonLd, breadcrumbJsonLd, faqJsonLd } from '~/lib/seo';
 
 export function getStaticPaths() {
   return guidePages.map((page) => ({
@@ -16,13 +16,20 @@ const page = getGuidePage(slug);
 if (!page) {
   return new Response('Not Found', { status: 404 });
 }
+
+const faqSchema = faqJsonLd(page);
+const relatedPages = page.relatedSlugs.flatMap((relatedSlug) => {
+  const relatedPage = getGuidePage(relatedSlug);
+  return relatedPage ? [relatedPage] : [];
+});
 ---
 
 <BaseLayout
   title={page.title}
   description={page.description}
   canonicalPath={pathForGuide(page)}
-  jsonLd={[articleJsonLd(page), breadcrumbJsonLd(page)]}
+  robots={page.indexable ? 'index,follow' : 'noindex,follow'}
+  jsonLd={[articleJsonLd(page), breadcrumbJsonLd(page), ...(faqSchema ? [faqSchema] : [])]}
 >
   <SiteShell>
     <article class="article">
@@ -32,7 +39,9 @@ if (!page) {
         <p>{page.description}</p>
         <div class="meta-row">
           <span>Updated {page.updated}</span>
-          <span>{page.confidence === 'verified' ? 'Verified source context' : 'Needs live playtest'}</span>
+          <span>Version {page.gameVersion}</span>
+          <span>Verified {page.lastVerifiedAt}</span>
+          <span>{page.indexable ? 'Published guide' : 'Research page: not indexed'}</span>
         </div>
       </header>
 
@@ -41,6 +50,25 @@ if (!page) {
         <p>{page.summary}</p>
         <ul>
           {page.highlights.map((highlight) => <li>{highlight}</li>)}
+        </ul>
+      </section>
+
+      <section class="article-section evidence-panel">
+        <h2>Version and evidence</h2>
+        <dl class="guide-facts">
+          <div><dt>Game version</dt><dd>{page.gameVersion}</dd></div>
+          <div><dt>Last verified</dt><dd>{page.lastVerifiedAt}</dd></div>
+          <div><dt>Publishing status</dt><dd>{page.indexable ? 'Indexable' : 'Research only'}</dd></div>
+        </dl>
+        <ul class="evidence-list">
+          {
+            page.evidence.map((source) => (
+              <li>
+                <a href={source.href} rel="noopener noreferrer" target="_blank">{source.label}</a>
+                <span>{source.sourceType} source, verified for {source.gameVersion}</span>
+              </li>
+            ))
+          }
         </ul>
       </section>
 
@@ -54,9 +82,54 @@ if (!page) {
                 {section.bullets.map((bullet) => <li>{bullet}</li>)}
               </ul>
             )}
+            {
+              section.table && (
+                <div class="guide-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>{section.table.columns.map((column) => <th scope="col">{column}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                      {
+                        section.table.rows.map((row) => (
+                        <tr>{row.map((cell, columnIndex) => <td data-label={section.table?.columns[columnIndex]}>{cell}</td>)}</tr>
+                        ))
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              )
+            }
+            {
+              section.steps && (
+                <ol class="guide-steps">
+                  {section.steps.map((step) => <li><strong>{step.title}</strong><p>{step.body}</p></li>)}
+                </ol>
+              )
+            }
             {section.note && <aside class="note">{section.note}</aside>}
           </section>
         ))
+      }
+
+      {
+        page.faqs && page.faqs.length > 0 && (
+          <section class="article-section faq-section">
+            <h2>Frequently asked questions</h2>
+            {page.faqs.map((faq) => <details><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}
+          </section>
+        )
+      }
+
+      {
+        relatedPages.length > 0 && (
+          <section class="article-section related-guides">
+            <h2>Related guides</h2>
+            <ul>
+              {relatedPages.map((relatedPage) => <li><a href={pathForGuide(relatedPage)}>{relatedPage.title}</a></li>)}
+            </ul>
+          </section>
+        )
       }
 
       <section class="article-section sources">

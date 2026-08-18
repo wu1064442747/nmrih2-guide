@@ -19,6 +19,12 @@ SITE_URL=https://example.com pnpm build
 SITE_URL=https://example.com pnpm check:dist
 ```
 
+## Content Workflow
+
+The guide data records a game version, a last-verified date, evidence links, related guides, and a publish status. Pages marked `needs-playtest` remain publicly reachable for research, but emit `noindex,follow` and are excluded from the generated sitemap until current-build evidence exists.
+
+The current 15-page content backlog and acceptance criteria are in [`docs/content/2026-08-17-content-backlog.md`](docs/content/2026-08-17-content-backlog.md).
+
 ## Analytics and Verification
 
 Production defaults target `https://no-moreroominhell2.wiki`.

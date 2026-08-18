@@ -1,12 +1,12 @@
 ---
 import SiteShell from '~/components/SiteShell.astro';
-import { guidePages, homePage, pathForGuide, siteConfig, sources } from '~/data/site';
+import { guidePages, homePage, indexableGuidePages, pathForGuide, siteConfig, sources } from '~/data/site';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import { videoGameJsonLd, websiteJsonLd } from '~/lib/seo';
 
-const p0Pages = guidePages.slice(0, 6);
-const mapPages = guidePages.filter((page) => page.intent === 'map');
-const modePages = guidePages.filter((page) => page.intent === 'mode');
+const p0Pages = indexableGuidePages;
+const modePages = indexableGuidePages.filter((page) => page.intent === 'mode');
+const researchPages = guidePages.filter((page) => !page.indexable);
 ---
 
 <BaseLayout
@@ -33,13 +33,13 @@ const modePages = guidePages.filter((page) => page.intent === 'mode');
 
     <section class="section split">
       <div>
-        <p class="eyebrow">Launch status</p>
-        <h2>What this site covers first</h2>
-        <p>
-          No More Room in Hell 2 launched 1.0 around Armageddon with Survival Mode,
-          Raven Rock, Solo Mode, Tutorial, Weekly Assignments, and Merits as the first
-          content cluster to organize.
-        </p>
+          <p class="eyebrow">Launch status</p>
+          <h2>What this site covers first</h2>
+          <p>
+          Armageddon 1.0 adds Survival Mode, Raven Rock, Solo Mode, a Tutorial, Weekly
+          Assignments, and Merits. This site publishes versioned, source-bounded overviews
+          first, then promotes route and database pages only when current-build evidence exists.
+          </p>
       </div>
       <dl class="facts">
         <div><dt>Game</dt><dd>{siteConfig.gameName}</dd></div>
@@ -61,7 +61,7 @@ const modePages = guidePages.filter((page) => page.intent === 'mode');
               <span>{page.eyebrow}</span>
               <h3>{page.title}</h3>
               <p>{page.summary}</p>
-              <small>{page.confidence === 'verified' ? 'Verified source context' : 'Needs live playtest'}</small>
+              <small>Verified for {page.gameVersion}</small>
             </a>
           ))
         }
@@ -80,11 +80,11 @@ const modePages = guidePages.filter((page) => page.intent === 'mode');
       </div>
       <div>
         <div class="section-heading">
-          <p class="eyebrow">Maps</p>
-          <h2>Build the route library</h2>
+          <p class="eyebrow">Research queue</p>
+          <h2>Capture before publishing</h2>
         </div>
         <div class="stack-list">
-          {mapPages.map((page) => <a href={pathForGuide(page)}>{page.title}</a>)}
+          {researchPages.map((page) => <a href={pathForGuide(page)}>{page.title} <span>Research only</span></a>)}
         </div>
       </div>
     </section>
