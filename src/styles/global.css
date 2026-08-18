@@ -319,6 +319,128 @@ img {
   line-height: 1.8;
 }
 
+.guide-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0 0;
+}
+
+.guide-facts div {
+  border: 1px solid var(--line);
+  padding: 14px;
+}
+
+.guide-facts dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.guide-facts dd {
+  margin: 6px 0 0;
+  font-weight: 750;
+}
+
+.evidence-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.evidence-list li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.evidence-list a,
+.related-guides a {
+  color: var(--accent-strong);
+}
+
+.evidence-list span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.guide-table-wrap {
+  overflow-x: auto;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+}
+
+.guide-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 540px;
+}
+
+.guide-table-wrap th,
+.guide-table-wrap td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide-table-wrap th {
+  background: var(--panel-strong);
+  color: var(--text);
+  font-size: 0.86rem;
+}
+
+.guide-table-wrap td {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.guide-steps {
+  display: grid;
+  gap: 14px;
+  margin: 20px 0 0;
+  padding-left: 24px;
+}
+
+.guide-steps li {
+  padding-left: 4px;
+}
+
+.guide-steps strong {
+  color: var(--text);
+}
+
+.guide-steps p {
+  margin: 6px 0 0;
+}
+
+.faq-section details {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.faq-section details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-section summary {
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.faq-section details p {
+  margin-bottom: 0;
+}
+
+.stack-list span {
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+}
+
 .note {
   border-left: 4px solid var(--accent-strong);
   margin-top: 16px;
@@ -352,7 +474,8 @@ img {
   .split,
   .two-columns,
   .guide-grid,
-  .facts {
+  .facts,
+  .guide-facts {
     grid-template-columns: 1fr;
   }
 
@@ -364,5 +487,55 @@ img {
   .hero-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .guide-table-wrap {
+    overflow: visible;
+    border: 0;
+  }
+
+  .guide-table-wrap table,
+  .guide-table-wrap tbody,
+  .guide-table-wrap tr,
+  .guide-table-wrap td {
+    display: block;
+    width: 100%;
+  }
+
+  .guide-table-wrap table {
+    min-width: 0;
+  }
+
+  .guide-table-wrap thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .guide-table-wrap tr {
+    border: 1px solid var(--line);
+    margin-top: 12px;
+  }
+
+  .guide-table-wrap td {
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
+  }
+
+  .guide-table-wrap td:last-child {
+    border-bottom: 0;
+  }
+
+  .guide-table-wrap td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 800;
   }
 }

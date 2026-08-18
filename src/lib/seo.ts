@@ -71,6 +71,23 @@ export function articleJsonLd(page: GuidePage) {
   };
 }
 
+export function faqJsonLd(page: GuidePage) {
+  if (!page.faqs || page.faqs.length === 0) return undefined;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage' as const,
+    mainEntity: page.faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 export function breadcrumbJsonLd(page: GuidePage) {
   return {
     '@context': 'https://schema.org',
